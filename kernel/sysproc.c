@@ -89,3 +89,31 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+//part1
+
+uint64 sys_sysinfo(void){
+  int n;
+  argint(0, &n);
+  return print_sysinfo(n);
+}
+
+//part2
+
+uint64 sys_procinfo(void){
+  uint64 ptr;
+  argaddr(0, &ptr);
+  struct proc* p = myproc();
+
+  uint32 data[3];
+  //1. get ppid
+  data[0] = p->parent->pid;
+  //2. get syscall_count
+  data[1] = p->syscall_count_of_this_process - 1; // The -1 operation excludes this syscall
+  //3. get page_usage
+  int page_count = p->sz / 4096;  //page size in xv6 is 4KB
+  if(p->sz % 4096 != 0) page_count++; //ceil(p->sz / 4096)
+  data[2] = page_count; //because page size in xv6 is 4KB
+
+  return copyout(p->pagetable, ptr, (char*)data, sizeof(uint32) * 3); //copy the data to user space and return
+}

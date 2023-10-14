@@ -124,6 +124,7 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  p->syscall_count_of_this_process = 0;   //initialize syscall count per process
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -680,4 +681,23 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+int print_sysinfo(int n) {   //the definition of print_sysinfo
+  if(n == 0) {  //calculate the total number of processes
+    struct proc *p;
+    int count = 0;
+    for(p = proc; p < &proc[NPROC]; p++){
+      if(p->state == RUNNABLE || p->state == RUNNING || p->state == ZOMBIE || p->state == SLEEPING){
+        count++;
+      }
+    }
+    return count;
+  } else if(n == 1) { //get total syscall count since system boost
+    return get_syscall_count();
+  } else if(n == 2) { //get current count of free memory pages
+    return get_free_memory_page_count();
+  }
+
+  return -1;
 }
