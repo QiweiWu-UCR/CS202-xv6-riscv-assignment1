@@ -694,7 +694,7 @@ int print_sysinfo(int n) {   //the definition of print_sysinfo
     }
     return count;
   } else if(n == 1) { //get total syscall count since system boost
-    return get_syscall_count();
+    return get_syscall_count() - 1;
   } else if(n == 2) { //get current count of free memory pages
     return get_free_memory_page_count();
   }
