@@ -113,7 +113,7 @@ uint64 sys_procinfo(void){
   //3. get page_usage
   int page_count = p->sz / 4096;  //page size in xv6 is 4KB
   if(p->sz % 4096 != 0) page_count++; //ceil(p->sz / 4096)
-  data[2] = page_count; //because page size in xv6 is 4KB
+  data[2] = page_count; 
 
   return copyout(p->pagetable, ptr, (char*)data, sizeof(uint32) * 3); //copy the data to user space and return
 }

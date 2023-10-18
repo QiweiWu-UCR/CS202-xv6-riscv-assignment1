@@ -139,8 +139,8 @@ syscall(void)
 {
   int num;
   struct proc *p = myproc();
-  syscall_count++;    //total syscall since machine boost
-  p->syscall_count_of_this_process++; //total syscall per process
+  syscall_count++;    // part1 total syscall since machine boost
+  p->syscall_count_of_this_process++; // part2 total syscall per process
 
   num = p->trapframe->a7;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
